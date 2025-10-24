@@ -1,44 +1,19 @@
-import { useReducer } from "react"
+import { lazy, Suspense, useState } from 'react'
 
-const emptyData = {
-  name: '',
-  town: '',
-  state: '',
-  country: '',
-  zipCode: ''
-}
 
-const reducer = (data, action) => {
-  return{...data, [action.type]:action.val}
-  
-}
+const Cllg = lazy(() => import ('./Cllg'));
+
 
 const App = () => {
 
-  const [state, dispatch] = useReducer(reducer,emptyData)
-
+  const [load,setLoad] = useState(false)
   return (
     <div>
-      <input type="text" onChange={(event) => {dispatch({val:event.target.value, type:'name'})}} placeholder="Name" />
-      <br />
-      <input type='text' onChange={(event) => {dispatch({val:event.target.value, type:'town'})}} placeholder='Town' />
-      <br />
-      <input type='text' onChange={(event) => {dispatch({val:event.target.value, type:'state'})}} placeholder='State' />
-      <br />
-      <input type='text' onChange={(event) => {dispatch({val:event.target.value, type:'country'})}} placeholder='Country' />
-      <br />
-      <input type='text' onChange={(event) => {dispatch({val:event.target.value, type:'zipcode'})}} placeholder='Zip Code' />
-      <br />
-      <button onClick={() => {console.log(state);
-      }}>Submit</button>
-      
-      <ul>
-        <li>Name: {state.name}</li>
-        <li>Town: {state.town}</li>
-        <li>State: {state.state}</li>
-        <li>Country: {state.country}</li>
-        <li>Zipcode: {state.zipcode}</li>
-      </ul>
+      <h1>Lazy Loading..</h1>
+      <button onClick={() => setLoad(prev => !prev)}>Login for Cllg</button>
+      {
+        load ? <Suspense fallback={<h2>Loading...</h2>} ><Cllg /></Suspense> : null
+      }
     </div>
   )
 }
